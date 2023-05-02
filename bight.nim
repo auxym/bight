@@ -43,43 +43,49 @@ proc readI64BE*(b: openArray[byte]): int64 =
 proc readI64BE*(p: pointer): int64 =
   cast[int64](readU64BE(p))
 
-proc readU32LE*(b: openArray[byte]): uint64 =
-  const bmask = 255'u64
+proc readU32LE*(b: openArray[byte]): uint32 =
+  const bmask = 255'u32
   result =
     (bmask and b[3]) shl 0o30 or
     (bmask and b[2]) shl 0o20 or
     (bmask and b[1]) shl 0o10 or
     (bmask and b[0])
 
-proc readU32LE*(p: pointer): uint64 =
+proc readU32LE*(p: pointer): uint32 =
   readU32LE(p.toOpenArrayByte(4))
 
-proc readI32LE*(b: openArray[byte]): int64 =
-  cast[int32](readU64LE(b))
+proc readI32LE*(b: openArray[byte]): int32 =
+  cast[int32](readU32LE(b))
 
-proc readI32LE*(p: pointer): int64 =
-  cast[int32](readU64LE(p))
+proc readI32LE*(p: pointer): int32 =
+  cast[int32](readU32LE(p))
 
-proc readU32BE*(b: openArray[byte]): uint64 =
-  const bmask = 255'u64
+proc readU32BE*(b: openArray[byte]): uint32 =
+  const bmask = 255'u32
   result =
     (bmask and b[0]) shl 0o30 or
     (bmask and b[1]) shl 0o20 or
     (bmask and b[2]) shl 0o10 or
     (bmask and b[3])
 
-proc readU32BE*(p: pointer): uint64 =
+proc readU32BE*(p: pointer): uint32 =
   readU32BE(p.toOpenArrayByte(4))
 
-proc readI32BE*(b: openArray[byte]): int64 =
-  cast[int32](readU64BE(b))
+proc readI32BE*(b: openArray[byte]): int32 =
+  cast[int32](readU32BE(b))
 
-proc readI32BE*(p: pointer): int64 =
-  cast[int32](readU64BE(p))
+proc readI32BE*(p: pointer): int32 =
+  cast[int32](readU32BE(p))
 
 when isMainModule:
   assert readU64LE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == 9843086184167632639'u64
   assert readU64BE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == 18441921395520346504'u64
   assert readI64LE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == -8603657889541918977'i64
   assert readI64BE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == -4822678189205112'i64
+
+  assert readU32LE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == 3437096703'u32
+  assert readU32BE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == 4293844428'u32
+  assert readI32LE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == -857870593'i32
+  assert readI32BE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == -1122868'i32
+
   echo "OK"
