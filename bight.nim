@@ -24,7 +24,7 @@
 template toOpenArrayByte(p: pointer, len: Natural): untyped =
   cast[ptr UncheckedArray[byte]](p).toOpenArray(0, len - 1)
 
-proc readU64LE*(b: openArray[byte]): uint64 =
+func readU64LE*(b: openArray[byte]): uint64 =
   const bmask = 255'u64
   result =
     (bmask and b[7]) shl 0o70 or
@@ -36,16 +36,16 @@ proc readU64LE*(b: openArray[byte]): uint64 =
     (bmask and b[1]) shl 0o10 or
     (bmask and b[0])
 
-proc readU64LE*(p: pointer): uint64 =
+func readU64LE*(p: pointer): uint64 =
   readU64LE(p.toOpenArrayByte(8))
 
-proc readI64LE*(b: openArray[byte]): int64 =
+func readI64LE*(b: openArray[byte]): int64 =
   cast[int64](readU64LE(b))
 
-proc readI64LE*(p: pointer): int64 =
+func readI64LE*(p: pointer): int64 =
   cast[int64](readU64LE(p))
 
-proc readU64BE*(b: openArray[byte]): uint64 =
+func readU64BE*(b: openArray[byte]): uint64 =
   const bmask = 255'u64
   result =
     (bmask and b[0]) shl 0o70 or
@@ -57,16 +57,16 @@ proc readU64BE*(b: openArray[byte]): uint64 =
     (bmask and b[6]) shl 0o10 or
     (bmask and b[7])
 
-proc readU64BE*(p: pointer): uint64 =
+func readU64BE*(p: pointer): uint64 =
   readU64BE(p.toOpenArrayByte(8))
 
-proc readI64BE*(b: openArray[byte]): int64 =
+func readI64BE*(b: openArray[byte]): int64 =
   cast[int64](readU64BE(b))
 
-proc readI64BE*(p: pointer): int64 =
+func readI64BE*(p: pointer): int64 =
   cast[int64](readU64BE(p))
 
-proc readU32LE*(b: openArray[byte]): uint32 =
+func readU32LE*(b: openArray[byte]): uint32 =
   const bmask = 255'u32
   result =
     (bmask and b[3]) shl 0o30 or
@@ -74,16 +74,16 @@ proc readU32LE*(b: openArray[byte]): uint32 =
     (bmask and b[1]) shl 0o10 or
     (bmask and b[0])
 
-proc readU32LE*(p: pointer): uint32 =
+func readU32LE*(p: pointer): uint32 =
   readU32LE(p.toOpenArrayByte(4))
 
-proc readI32LE*(b: openArray[byte]): int32 =
+func readI32LE*(b: openArray[byte]): int32 =
   cast[int32](readU32LE(b))
 
-proc readI32LE*(p: pointer): int32 =
+func readI32LE*(p: pointer): int32 =
   cast[int32](readU32LE(p))
 
-proc readU32BE*(b: openArray[byte]): uint32 =
+func readU32BE*(b: openArray[byte]): uint32 =
   const bmask = 255'u32
   result =
     (bmask and b[0]) shl 0o30 or
@@ -91,39 +91,39 @@ proc readU32BE*(b: openArray[byte]): uint32 =
     (bmask and b[2]) shl 0o10 or
     (bmask and b[3])
 
-proc readU32BE*(p: pointer): uint32 =
+func readU32BE*(p: pointer): uint32 =
   readU32BE(p.toOpenArrayByte(4))
 
-proc readI32BE*(b: openArray[byte]): int32 =
+func readI32BE*(b: openArray[byte]): int32 =
   cast[int32](readU32BE(b))
 
-proc readI32BE*(p: pointer): int32 =
+func readI32BE*(p: pointer): int32 =
   cast[int32](readU32BE(p))
 
-proc readU16LE*(b: openArray[byte]): uint16 =
+func readU16LE*(b: openArray[byte]): uint16 =
   const bmask = 255'u16
   result = (bmask and b[1]) shl 8 or (bmask and b[0])
 
-proc readU16LE*(p: pointer): uint16 =
+func readU16LE*(p: pointer): uint16 =
   readU16LE(p.toOpenArrayByte(4))
 
-proc readI16LE*(b: openArray[byte]): int16 =
+func readI16LE*(b: openArray[byte]): int16 =
   cast[int16](readU16LE(b))
 
-proc readI16LE*(p: pointer): int16 =
+func readI16LE*(p: pointer): int16 =
   cast[int16](readU16LE(p))
 
-proc readU16BE*(b: openArray[byte]): uint16 =
+func readU16BE*(b: openArray[byte]): uint16 =
   const bmask = 255'u16
   result = (bmask and b[0]) shl 8 or (bmask and b[1])
 
-proc readU16BE*(p: pointer): uint16 =
+func readU16BE*(p: pointer): uint16 =
   readU16BE(p.toOpenArrayByte(4))
 
-proc readI16BE*(b: openArray[byte]): int16 =
+func readI16BE*(b: openArray[byte]): int16 =
   cast[int16](readU16BE(b))
 
-proc readI16BE*(p: pointer): int16 =
+func readI16BE*(p: pointer): int16 =
   cast[int16](readU16BE(p))
 
 when isMainModule:
