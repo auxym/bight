@@ -126,6 +126,59 @@ func readI16BE*(b: openArray[byte]): int16 =
 func readI16BE*(p: pointer): int16 =
   cast[int16](readU16BE(p))
 
+proc writeBytesBE[T: SomeInteger](x: T, dst: var openArray[byte]) =
+  const bmask = block:
+    when T is SomeSignedInt:
+      0xFF'i64
+    else:
+      0xFF'u64
+
+  const s = sizeof(T)
+  when s == 8:
+    dst[0] = byte(((bmask shl 0o70) and x) shr 0o70)
+    dst[1] = byte(((bmask shl 0o60) and x) shr 0o60)
+    dst[2] = byte(((bmask shl 0o50) and x) shr 0o50)
+    dst[3] = byte(((bmask shl 0o40) and x) shr 0o40)
+  when s >= 4:
+    dst[s - 4] = byte(((bmask shl 0o30) and x) shr 0o30)
+    dst[s - 3] = byte(((bmask shl 0o20) and x) shr 0o20)
+  when s >= 2:
+    dst[s - 2] = byte(((bmask shl 0o10) and x) shr 0o10)
+  dst[s - 1] = byte(bmask and x)
+
+proc writeBytesBE*[T: SomeInteger](x: T, dst: pointer) =
+  writeBytesBE(x, dst.toOpenArrayByte(sizeof(T)))
+
+func toBytesBE*[T: SomeInteger](x: T): array[sizeof(x), byte] =
+  writeBytesBE(x, result)
+
+proc writeBytesLE*[T: SomeInteger](x: T, dst: var openArray[byte]) =
+  const bmask = block:
+    when T is SomeSignedInt:
+      0xFF'i64
+    else:
+      0xFF'u64
+
+  const s = sizeof(T)
+  when s == 8:
+    dst[7] = byte(((bmask shl 0o70) and x) shr 0o70)
+    dst[6] = byte(((bmask shl 0o60) and x) shr 0o60)
+    dst[5] = byte(((bmask shl 0o50) and x) shr 0o50)
+    dst[4] = byte(((bmask shl 0o40) and x) shr 0o40)
+  when s >= 4:
+    dst[3] = byte(((bmask shl 0o30) and x) shr 0o30)
+    dst[2] = byte(((bmask shl 0o20) and x) shr 0o20)
+  when s >= 2:
+    dst[1] = byte(((bmask shl 0o10) and x) shr 0o10)
+  dst[0] = byte(bmask and x)
+
+proc writeBytesLE*[T: SomeInteger](x: T, dst: pointer) =
+  writeBytesLE(x, dst.toOpenArrayByte(sizeof(T)))
+
+func toBytesLE*[T: SomeInteger](x: T): array[sizeof(x), byte] =
+  writeBytesLE(x, result)
+
+
 when isMainModule:
   assert readU64LE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == 9843086184167632639'u64
   assert readU64BE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == 18441921395520346504'u64

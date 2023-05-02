@@ -1,6 +1,6 @@
 # Bight
 
-> Bight (noun): A U-shaped part in the middle of the length of rope.
+> Bight (noun): A U-shaped part in the middle of a length of rope.
 
 So, the opposite of an *end*, in a way.
 
