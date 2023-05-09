@@ -218,7 +218,7 @@ proc writeBytesBE*[T: SomeInteger](x: T, dst: pointer) =
   writeBytesBE(x, uarr.toOpenArray(0, sizeof(T) - 1))
 
 func toBytesBE*[T: SomeInteger](x: T): array[sizeof(x), byte] =
-  ## Encode given integers as an array of bytes in big-endian order.
+  ## Encode given integer as an array of bytes in big-endian order.
   ##
   ## Returns an array of `sizeof(x)` bytes.
   writeBytesBE(x, result)
@@ -254,7 +254,7 @@ proc writeBytesLE*[T: SomeInteger](x: T, dst: pointer) =
   writeBytesLE(x, uarr.toOpenArray(0, sizeof(T) - 1))
 
 func toBytesLE*[T: SomeInteger](x: T): array[sizeof(x), byte] =
-  ## Encode given integers as an array of bytes in little-endian order.
+  ## Encode given integer as an array of bytes in little-endian order.
   ##
   ## Returns an array of `sizeof(x)` bytes.
   writeBytesLE(x, result)
