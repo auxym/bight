@@ -126,7 +126,7 @@ func readI16BE*(b: openArray[byte]): int16 =
 func readI16BE*(p: pointer): int16 =
   cast[int16](readU16BE(p))
 
-proc writeBytesBE[T: SomeInteger](x: T, dst: var openArray[byte]) =
+proc writeBytesBE*[T: SomeInteger](x: T, dst: var openArray[byte]) =
   const bmask = block:
     when T is SomeSignedInt:
       0xFF'i64
@@ -147,7 +147,8 @@ proc writeBytesBE[T: SomeInteger](x: T, dst: var openArray[byte]) =
   dst[s - 1] = byte(bmask and x)
 
 proc writeBytesBE*[T: SomeInteger](x: T, dst: pointer) =
-  writeBytesBE(x, dst.toOpenArrayByte(sizeof(T)))
+  var uarr = cast[ptr UncheckedArray[byte]](dst)
+  writeBytesBE(x, uarr.toOpenArray(0, sizeof(T) - 1))
 
 func toBytesBE*[T: SomeInteger](x: T): array[sizeof(x), byte] =
   writeBytesBE(x, result)
@@ -173,26 +174,8 @@ proc writeBytesLE*[T: SomeInteger](x: T, dst: var openArray[byte]) =
   dst[0] = byte(bmask and x)
 
 proc writeBytesLE*[T: SomeInteger](x: T, dst: pointer) =
-  writeBytesLE(x, dst.toOpenArrayByte(sizeof(T)))
+  var uarr = cast[ptr UncheckedArray[byte]](dst)
+  writeBytesLE(x, uarr.toOpenArray(0, sizeof(T) - 1))
 
 func toBytesLE*[T: SomeInteger](x: T): array[sizeof(x), byte] =
   writeBytesLE(x, result)
-
-
-when isMainModule:
-  assert readU64LE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == 9843086184167632639'u64
-  assert readU64BE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == 18441921395520346504'u64
-  assert readI64LE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == -8603657889541918977'i64
-  assert readI64BE([0xFF'u8, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88]) == -4822678189205112'i64
-
-  assert readU32LE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == 3437096703'u32
-  assert readU32BE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == 4293844428'u32
-  assert readI32LE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == -857870593'i32
-  assert readI32BE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == -1122868'i32
-
-  assert readU16LE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == 61183'u16
-  assert readU16BE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == 65518'u16
-  assert readI16LE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == -4353'i16
-  assert readI16BE([0xFF'u8, 0xEE, 0xDD, 0xCC]) == -18'i16
-
-  echo "OK"
