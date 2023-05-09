@@ -1,1 +1,2 @@
---outdir: "bin"
+if getCommand() != "doc":
+  --outdir: "bin"
