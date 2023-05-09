@@ -1,2 +1,1 @@
-if getCommand() != "doc":
-  --outdir: "bin"
+--outdir: "bin"
