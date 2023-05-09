@@ -8,4 +8,4 @@ Bight is a Nim library to handle byte ordering, an alternative to [std/endians](
 
 Simple read/write API with both value and pointer overloads. No swapping, just say which order and size you want.
 
-[Generated API docs](./htmldocs/bight.html)
+[Generated API docs](https://auxym.github.io/bight/bight.html)
