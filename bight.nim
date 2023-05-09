@@ -188,6 +188,7 @@ func readI16BE*(p: pointer): int16 =
   cast[int16](readU16BE(p))
 
 proc writeBytesBE*[T: SomeInteger](x: T, dst: var openArray[byte]) =
+  ## Write the given integer as bytes in big-endian order to the byte array `dst`.
   const bmask = block:
     when T is SomeSignedInt:
       0xFF'i64
@@ -208,13 +209,22 @@ proc writeBytesBE*[T: SomeInteger](x: T, dst: var openArray[byte]) =
   dst[s - 1] = byte(bmask and x)
 
 proc writeBytesBE*[T: SomeInteger](x: T, dst: pointer) =
+  ## Write the given integer as bytes in big-endian order to a memory location
+  ## specified by a pointer.
+  ##
+  ## Note: All pointer operations are unsafe. This proc will write `sizeof(x)`
+  ## bytes in memory at the location specified by the `dst` pointer.
   var uarr = cast[ptr UncheckedArray[byte]](dst)
   writeBytesBE(x, uarr.toOpenArray(0, sizeof(T) - 1))
 
 func toBytesBE*[T: SomeInteger](x: T): array[sizeof(x), byte] =
+  ## Encode given integers as an array of bytes in big-endian order.
+  ##
+  ## Returns an array of `sizeof(x)` bytes.
   writeBytesBE(x, result)
 
 proc writeBytesLE*[T: SomeInteger](x: T, dst: var openArray[byte]) =
+  ## Write the given integer as bytes in little-endian order to the byte array `dst`.
   const bmask = block:
     when T is SomeSignedInt:
       0xFF'i64
@@ -235,8 +245,16 @@ proc writeBytesLE*[T: SomeInteger](x: T, dst: var openArray[byte]) =
   dst[0] = byte(bmask and x)
 
 proc writeBytesLE*[T: SomeInteger](x: T, dst: pointer) =
+  ## Write the given integer as bytes in little-endian order to a memory location
+  ## specified by a pointer.
+  ##
+  ## Note: All pointer operations are unsafe. This proc will write `sizeof(x)`
+  ## bytes in memory at the location specified by the `dst` pointer.
   var uarr = cast[ptr UncheckedArray[byte]](dst)
   writeBytesLE(x, uarr.toOpenArray(0, sizeof(T) - 1))
 
 func toBytesLE*[T: SomeInteger](x: T): array[sizeof(x), byte] =
+  ## Encode given integers as an array of bytes in little-endian order.
+  ##
+  ## Returns an array of `sizeof(x)` bytes.
   writeBytesLE(x, result)
