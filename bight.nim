@@ -25,6 +25,7 @@ template toOpenArrayByte(p: pointer, len: Natural): untyped =
   cast[ptr UncheckedArray[byte]](p).toOpenArray(0, len - 1)
 
 func readU64LE*(b: openArray[byte]): uint64 =
+  ## Read a `uint64` in little-endian order from a byte array.
   const bmask = 255'u64
   result =
     (bmask and b[7]) shl 0o70 or
@@ -37,15 +38,26 @@ func readU64LE*(b: openArray[byte]): uint64 =
     (bmask and b[0])
 
 func readU64LE*(p: pointer): uint64 =
+  ## Read a `uint64` in little-endian order from a memory location specified by
+  ## a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 8 bytes from
+  ## the provided pointer.
   readU64LE(p.toOpenArrayByte(8))
 
 func readI64LE*(b: openArray[byte]): int64 =
+  ## Read an `int64` in little-endian order from a byte array.
   cast[int64](readU64LE(b))
 
 func readI64LE*(p: pointer): int64 =
+  ## Read an `int64` in little-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 8 bytes from
+  ## the provided pointer.
   cast[int64](readU64LE(p))
 
 func readU64BE*(b: openArray[byte]): uint64 =
+  ## Read a `uint64` in big-endian order from a byte array.
   const bmask = 255'u64
   result =
     (bmask and b[0]) shl 0o70 or
@@ -58,15 +70,25 @@ func readU64BE*(b: openArray[byte]): uint64 =
     (bmask and b[7])
 
 func readU64BE*(p: pointer): uint64 =
+  ## Read a `uint64` in big-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 8 bytes from
+  ## the provided pointer.
   readU64BE(p.toOpenArrayByte(8))
 
 func readI64BE*(b: openArray[byte]): int64 =
+  ## Read an `int64` in big-endian order from a byte array.
   cast[int64](readU64BE(b))
 
 func readI64BE*(p: pointer): int64 =
+  ## Read an `int64` in big-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 8 bytes from
+  ## the provided pointer.
   cast[int64](readU64BE(p))
 
 func readU32LE*(b: openArray[byte]): uint32 =
+  ## Read a `uint32` in little-endian order from a byte array.
   const bmask = 255'u32
   result =
     (bmask and b[3]) shl 0o30 or
@@ -75,15 +97,25 @@ func readU32LE*(b: openArray[byte]): uint32 =
     (bmask and b[0])
 
 func readU32LE*(p: pointer): uint32 =
+  ## Read a `uint32` in little-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 4 bytes from
+  ## the provided pointer.
   readU32LE(p.toOpenArrayByte(4))
 
 func readI32LE*(b: openArray[byte]): int32 =
+  ## Read an `int32` in little-endian order from a byte array.
   cast[int32](readU32LE(b))
 
 func readI32LE*(p: pointer): int32 =
+  ## Read an `int32` in little-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 4 bytes from
+  ## the provided pointer.
   cast[int32](readU32LE(p))
 
 func readU32BE*(b: openArray[byte]): uint32 =
+  ## Read a `uint32` in big-endian order from a byte array.
   const bmask = 255'u32
   result =
     (bmask and b[0]) shl 0o30 or
@@ -92,38 +124,67 @@ func readU32BE*(b: openArray[byte]): uint32 =
     (bmask and b[3])
 
 func readU32BE*(p: pointer): uint32 =
+  ## Read a `uint32` in big-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 4 bytes from
+  ## the provided pointer.
   readU32BE(p.toOpenArrayByte(4))
 
 func readI32BE*(b: openArray[byte]): int32 =
+  ## Read an `int32` in big-endian order from a byte array.
   cast[int32](readU32BE(b))
 
 func readI32BE*(p: pointer): int32 =
+  ## Read an `int32` in big-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 4 bytes from
+  ## the provided pointer.
   cast[int32](readU32BE(p))
 
 func readU16LE*(b: openArray[byte]): uint16 =
+  ## Read a `uint16` in little-endian order from a byte array.
   const bmask = 255'u16
   result = (bmask and b[1]) shl 8 or (bmask and b[0])
 
 func readU16LE*(p: pointer): uint16 =
+  ## Read a `uint16` in little-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 2 bytes from
+  ## the provided pointer.
   readU16LE(p.toOpenArrayByte(4))
 
 func readI16LE*(b: openArray[byte]): int16 =
+  ## Read an `int16` in little-endian order from a byte array.
   cast[int16](readU16LE(b))
 
 func readI16LE*(p: pointer): int16 =
+  ## Read an `int16` in little-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 2 bytes from
+  ## the provided pointer.
   cast[int16](readU16LE(p))
 
 func readU16BE*(b: openArray[byte]): uint16 =
+  ## Read a `uint16` in big-endian order from a byte array.
   const bmask = 255'u16
   result = (bmask and b[0]) shl 8 or (bmask and b[1])
 
 func readU16BE*(p: pointer): uint16 =
+  ## Read a `uint16` in big-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 2 bytes from
+  ## the provided pointer.
   readU16BE(p.toOpenArrayByte(4))
 
 func readI16BE*(b: openArray[byte]): int16 =
+  ## Read an `int16` in big-endian order from a byte array.
   cast[int16](readU16BE(b))
 
 func readI16BE*(p: pointer): int16 =
+  ## Read an `int16` in big-endian order from a memory location specified by a pointer.
+  ##
+  ## Note: all pointer operations are unsafe. This proc will read 2 bytes from
+  ## the provided pointer.
   cast[int16](readU16BE(p))
 
 proc writeBytesBE*[T: SomeInteger](x: T, dst: var openArray[byte]) =
